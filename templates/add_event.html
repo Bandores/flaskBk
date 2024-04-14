@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <h2>Добавить мероприятие</h2>
+      <form method="post">
+        <div class="form-group">
+          <label for="eventDate">Дата и время:</label>
+          <input type="datetime-local" class="form-control" id="eventDate" name="date_time">
+        </div>
+        <div class="form-group">
+          <label for="eventType">Тип мероприятия:</label>
+          <select class="form-control" id="eventType" name="type">
+            <option value="Открытие">Открытие</option>
+            <option value="Выставка">Выставка</option>
+            <option value="Ярмарка">Ярмарка</option>
+            <option value="Презентация">Презентация</option>
+            <option value="Праздник">Праздник</option>
+            <option value="Пресс-мероприятие">Пресс-мероприятие</option>
+            <option value="Мастер-класс/тренинг/семинар">Мастер-класс/тренинг/семинар</option>
+            <option value="Фестиваль, концерт">Фестиваль, концерт</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="eventName">Название:</label>
+          <input type="text" class="form-control" id="eventName" name="name">
+        </div>
+        <div class="form-group">
+          <label for="eventAddress">Адрес:</label>
+          <input type="text" class="form-control" id="eventAddress" name="address">
+        </div>
+        <div class="form-group">
+          <label for="eventInfo">Общая информация:</label>
+          <textarea class="form-control" id="eventInfo" rows="3" name="info"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="eventPhoto">Фото (URL):</label>
+          <input type="text" class="form-control" id="eventPhoto" name="photo">
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

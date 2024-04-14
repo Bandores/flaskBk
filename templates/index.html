@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Мероприятия</h2>
+    </div>
+  </div>
+  <div class="row">
+    {% for event_type, events_by_type in events_by_type.items() %}
+    <div class="col-lg-12">
+
+      {% for event in events_by_type %}
+      <div class="card shadow rounded" id="{{ event.id }}">
+        <div class="row no-gutters">
+          <div class="col-md-4 text-center">
+            <img src="{{ event.photo }}" class="card-img-top mx-auto d-block" alt="Photo" style="max-height: 200px; width: auto;">
+          </div>
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="card-body">
+              <h2 class="card-title">{{ event.name }}</h2>
+              <h3 class="card-subtitle mb-2 text-muted">{{ event.date_time }}</h3>
+              <p class="card-text">Тип: {{ event.type }}</p>
+              <p class="card-text">Адрес: {{ event.address }}</p>
+              <p class="card-text">{{ event.info }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
