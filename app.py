@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
 
 app = Flask(__name__)
@@ -33,18 +35,22 @@ class Event(db.Model):
     photo = db.Column(db.String(200), nullable=True)
 
 
+# Создаем административную панель
+admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Event, db.session))
+
+
 # Главная страница
 @app.route('/')
 def index():
     events = Event.query.all()
-    # Группировка мероприятий по типам
     events_by_type = {}
     for event in events:
         if event.type not in events_by_type:
             events_by_type[event.type] = []
         events_by_type[event.type].append(event)
 
-    # Группировка мероприятий по датам
     events_by_date = {}
     for event in events:
         date_str = event.date_time.strftime('%Y-%m-%d')
@@ -54,7 +60,13 @@ def index():
 
     return render_template('index.html', events_by_type=events_by_type, events_by_date=events_by_date)
 
-
+@app.route('/delete_event', methods=['POST'])
+def delete_event():
+    event_id = request.form['event_id']
+    event = Event.query.get(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    return redirect(url_for('index'))
 # Страница добавления мероприятия
 @app.route('/add_event', methods=['GET', 'POST'])
 def add_event():
@@ -72,6 +84,13 @@ def add_event():
         return redirect(url_for('index'))
     return render_template('add_event.html')
 
+
+# Страница администратора
+@app.route('/admin')
+def admin_page():
+    users = User.query.all()
+    events = Event.query.all()
+    return render_template('admin.html', users=users, events=events)
 
 if __name__ == '__main__':
     with app.app_context():
