@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <img src="{{ event.photo }}"  alt="Photo" style="object-fit: cover; height: 500px;">
+        <div class="card-body">
+            <h2 class="card-title">{{ event.name }}</h2>
+            <h5 class="card-text">{{ event.date_time }}</h5>
+            <p class="card-text">Место проведения: {{ event.address }}</p>
+            <p class="card-text">Тип мероприятия: {{ event.type }}</p>
+            <p class="card-text">Описание: {{ event.info }}</p>
+        </div>
+        <div class="card-footer">
+            <form method="POST" action="/delete_event">
+                <input type="hidden" name="event_id" value="{{ event.id }}">
+                <button type="submit" class="btn btn-danger mr-2">Удалить</button>
+            </form>
+            <a href="/" class="btn btn-primary">Назад</a>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Комментарии к мероприятию</h3>
+        </div>
+        <div class="card-body">
+            {% for comment in rating_comments %}
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h4 class="card-text">Пользователь: {{ comment.user.username }}</h4>
+                    <h5 class="card-title">Оценка:
+                        {% for _ in range(comment.rating) %} &#9733; {% endfor %}
+                    </h5>
+                    <p class="card-text">{{ comment.comment }}</p>
+                    {% if comment.user %}
+                    
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Форма для оценки и комментариев -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Оценить и прокомментировать мероприятие</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('event_details', event_id=event.id) }}">
+                <div class="form-group">
+                    <label for="rating">Оценка:</label>
+                    <select class="form-control" id="rating" name="rating" required>
+                        <option value="1">★</option>
+                        <option value="2">★★</option>
+                        <option value="3">★★★</option>
+                        <option value="4">★★★★</option>
+                        <option value="5">★★★★★</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Комментарий:</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
